@@ -1,0 +1,133 @@
+<div class="add-patient-container">
+  <div class="page-header">
+    <h1 class="page-title">Add New Patient</h1>
+    <p class="page-description">
+      Create a new patient record in the Epic FHIR system
+    </p>
+  </div>
+  <div class="form-container card">
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h2 class="section-title">Personal Information</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="firstName">First Name *</label>
+            <input
+              formControlName="firstName"
+              placeholder="First Name *"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lastName">Last Name *</label>
+            <input
+              formControlName="lastName"
+              placeholder="Last Name *"
+              class="form-input"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dateOfBirth">Date of Birth *</label>
+            <input
+              type="date"
+              formControlName="dateOfBirth"
+              required
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gender">Gender *</label>
+            <select formControlName="gender" required class="form-input">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="section-title">Contact Information</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input
+              formControlName="phoneNumber"
+              placeholder="(555) 123-4567"
+              class="form-input"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input
+              formControlName="emailAddress"
+              placeholder="patient@example.com"
+              class="form-input"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="section-title">Address</h2>
+        <div class="form-grid">
+          <div class="form-group form-group-full">
+            <label class="form-label" for="street">Street Address</label>
+            <input
+              formControlName="streetAddress"
+              placeholder="123 Main Street"
+              class="form-input"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="city">City</label>
+            <input
+              formControlName="city"
+              placeholder="Springfield"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="state">State</label>
+            <input
+              formControlName="state"
+              placeholder="IL"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="zip">ZIP Code</label>
+            <input
+              formControlName="zipCode"
+              placeholder="62701"
+              class="form-input"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="resetForm()" class="btn btn-secondary">
+          Reset
+        </button>
+        <button
+          type="submit"
+          [disabled]="!patientForm.valid || isSubmitting"
+          class="btn btn-primary"
+        >
+          {{ isSubmitting ? "Adding..." : "Add Patient" }}
+        </button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+</div>

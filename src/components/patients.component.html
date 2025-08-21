@@ -1,0 +1,142 @@
+<div class="patients-container">
+  <div class="patients-header">
+    <h1>Patient Management</h1>
+    <p>Search and view patient records from Epic FHIR resources</p>
+  </div>
+
+  <div class="search-section card">
+    <div class="search-header">
+      <h2>Patient Search</h2>
+      <div class="search-badges">
+        <span class="badge badge-success">FHIR Connected</span>
+        <span class="badge badge-success">Epic Sandbox</span>
+      </div>
+    </div>
+    <form (ngSubmit)="onSearch()" #searchForm="ngForm">
+      <div class="search-form">
+        <div class="search-input-group">
+          <input
+            type="text"
+            placeholder="Search by MRN or Patient ID"
+            class="form-input search-input"
+            [(ngModel)]="MRN"
+            name="mrn"
+          />
+          <button class="btn btn-primary search-button">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+            Search
+          </button>
+        </div>
+        <div class="form-grid">
+          <div class="search-input-group">
+            <input
+              type="text"
+              placeholder="Family Name"
+              [(ngModel)]="searchModel.family"
+              name="family"
+              class="form-input search-input"
+            />
+          </div>
+
+          <div class="search-input-group">
+            <select
+              [(ngModel)]="searchModel.gender"
+              name="gender"
+              class="search-input"
+              class="form-input search-input"
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+              <option value="unknown">Unknown</option>
+            </select>
+          </div>
+          <div class="search-input-group">
+            <input
+              type="date"
+              placeholder="Birthdate"
+              [(ngModel)]="searchModel.birthdate"
+              name="birthdate"
+              class="search-input"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- <form (ngSubmit)="onSearch()" #searchForm="ngForm">
+     <div class="search-fields-grid">
+        <input type="text" placeholder="Family Name" [(ngModel)]="searchModel.family" name="family" class="search-input" />
+        <input type="text" placeholder="Given Name" [(ngModel)]="searchModel.given" name="given" class="search-input" />
+        <input type="date" placeholder="Birthdate" [(ngModel)]="searchModel.birthdate" name="birthdate" class="search-input" />
+        <select [(ngModel)]="searchModel.gender" name="gender" class="search-input">
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+          <option value="unknown">Unknown</option>
+        </select>
+        <input type="text" placeholder="Address" [(ngModel)]="searchModel.address" name="address" class="search-input" />
+        <input type="text" placeholder="City" [(ngModel)]="searchModel.city" name="city" class="search-input" />
+        <input type="text" placeholder="State" [(ngModel)]="searchModel.state" name="state" class="search-input" />
+        <input type="text" placeholder="Postal Code" [(ngModel)]="searchModel.postal" name="postal" class="search-input" />
+        <input type="text" placeholder="Telecom (Phone or Email)" [(ngModel)]="searchModel.telecom" name="telecom" class="search-input" />
+      </div> -->
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngIf="!loading && filteredPatients.length > 0" class="patients-grid">
+    <div *ngFor="let patient of filteredPatients" class="patient-card card">
+      <div class="patient-header">
+        <div class="patient-avatar">
+          {{ patient.firstName.charAt(0) }}{{ patient.lastName.charAt(0) }}
+        </div>
+        <div class="patient-basic-info">
+          <h3>{{ patient.firstName }} {{ patient.lastName }}</h3>
+          <p>MRN: {{ patient.patientId }}</p>
+        </div>
+      </div>
+
+      <div class="patient-details">
+        <div class="detail-row">
+          <span>DOB:</span> <span>{{ formatDate(patient.dateOfBirth) }}</span>
+        </div>
+        <div class="detail-row">
+          <span>Gender:</span> <span>{{ patient.gender }}</span>
+        </div>
+        <div class="detail-row">
+          <span>Phone:</span>
+          <span>{{ patient.phoneNumber || "Not provided" }}</span>
+        </div>
+        <div class="detail-row">
+          <span>Email:</span>
+          <span>{{ patient.emailAddress || "Not provided" }}</span>
+        </div>
+        <div class="detail-row" *ngIf="patient.streetAddress">
+          <span>Address:</span>
+          <span
+            >{{ patient.streetAddress }}, {{ patient.city }},
+            {{ patient.state }} {{ patient.zipCode }}</span
+          >
+        </div>
+      </div>
+
+      <!-- <div class="patient-actions">
+        <button class="btn btn-primary" (click)="viewVitals(patient.patientId)">View Vitals</button>
+        <button class="btn btn-secondary">Edit Patient</button>
+      </div> -->
+    </div>
+  </div>
+
+  <div *ngIf="!loading && filteredPatients.length === 0" class="empty-state">
+    <h3>No patients found</h3>
+    <p>Try adjusting your search criteria or add a new patient.</p>
+  </div>
+</div>
